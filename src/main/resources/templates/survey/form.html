@@ -10,6 +10,7 @@
 <div th:if="${param.complete}" >
 	更新が完了しました。
 </div>
+<h2 th:text="${complete}"></h2>
 <form method="post" action="#" th:action="@{/survey/confirm}" th:object="${surveyForm}">
 	<label for="age">年齢:</label>
 	<input id="age" name="age" type="number" th:value="*{age}"><br>

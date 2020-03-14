@@ -16,6 +16,7 @@ public class SurveyForm{
     private int satisfaction;
 
     /*Add parameters(200 characters or less) 引数を追加(200文字以内)*/
+	@NotNull
 	@Size(min=1, max=200, message="１〜２００文字以内で入力してください")
     private String comment;
 	
