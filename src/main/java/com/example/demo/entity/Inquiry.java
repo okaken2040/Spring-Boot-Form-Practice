@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import java.time.LocalDateTime;
 
 /*
- * This is completed in Easy mode. If you want to practice, please delete this file.
+ * ＝＝＝DTOはDAOやServiceクラスControllerクラスの間を、値を運ぶために利用される。データを格納する役割を持つ。運び屋。＝＝＝
  */
 public class Inquiry {
 	private int id;
