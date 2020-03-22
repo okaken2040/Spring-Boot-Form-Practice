@@ -38,15 +38,20 @@ public class InquiryServiceImpl implements InquiryService{
 	}
 
 	
-//  This method is used in the latter chapter
-//	@Override
-//	public void update(Inquiry inquiry) {
-//		
-//		//return dao.updateInquiry(inquiry);
-//		if(dao.updateInquiry(inquiry) == 0) {
-//			throw new InquiryNotFoundException("can't find the same ID");
-//		}
-//	}
+//  想定外の状況に対してはビジネスロジック(serviceクラス)内で例外処理を組むのが一般的。
+	@Override
+	public void update(Inquiry inquiry) {
+
+		//return dao.updateInquiry(inquiry);
+		if(dao.updateInquiry(inquiry) == 0) {
+			// ↑updateInquiryを実行
+			// もし、where句に該当する行がなければ「0」が返って来るので、
+			// その際に独自に作成した「InquiryNotFoundException」をインスタンス化してthrowする。
+			throw new InquiryNotFoundException("can't find the same ID");
+			// ↑ 「throw」は例外を意図的に起こして、try-catchなどで例外処理を扱えるようにするもの。
+			// 引数の値が望んでいるものでない場合に例外を発生させ、呼び出し元にエラーメッセージを返すことができる。
+		}
+	}
 	
 	@Override
 	public List<Inquiry> getAll() {

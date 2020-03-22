@@ -33,17 +33,18 @@ public class InquiryDaoImpl implements InquiryDao{
 		jdbcTemplate.update("INSERT INTO inquiry(name, email, contents, created) VALUES(?, ?, ?, ?)",
 				inquiry.getName(), inquiry.getEmail(),inquiry.getContents(),inquiry.getCreated());
 	}
-	/* 
+	/*
 	 * sqlインジェクション(悪意のある攻撃)に対処するためにprepared statementでsqlを作成する。
 	 * 編集できる項目をあらかじめ設定し、制限するイメージ。また事前にコンパイルが行われるため高速化も期待できる。
 	 */
-	
-//  This method is used in the latter chapter
-//	@Override
-//	public int updateInquiry(Inquiry inquiry) {
-//		return jdbcTemplate.update("UPDATE inquiry SET name = ?, email = ?,contents = ? WHERE id = ?",
-//				 inquiry.getName(), inquiry.getEmail(), inquiry.getContents(), inquiry.getId() );	
-//	}
+
+	@Override
+	public int updateInquiry(Inquiry inquiry) {
+		//通常where句に対応する行が存在する場合、「1」が返されるが、存在しない場合は「0」が帰ってくる。
+		//ビジネスロジックの実行クラス(今回はInquiryServiceImpl)内で、「0」に対する例外処理を組んでいく。
+		return jdbcTemplate.update("UPDATE inquiry SET name = ?, email = ?,contents = ? WHERE id = ?",
+				 inquiry.getName(), inquiry.getEmail(), inquiry.getContents(), inquiry.getId() );
+	}
 
 	@Override
 	public List<Inquiry> getAll() {

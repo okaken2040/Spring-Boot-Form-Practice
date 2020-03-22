@@ -3,15 +3,13 @@ package com.example.demo.app.inquiry;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.service.InquiryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Inquiry;
@@ -37,6 +35,31 @@ public class InquiryController {
 	@GetMapping
 	public String index(Model model) {
 		List<Inquiry> list = inquiryService.getAll();
+
+		// 意図的に例外を作成。
+		// Formクラスから値を取ってくるのが手間なので、取ってきた想定で作成。
+		// 実際idは3までしかないがあえて4を指定して例外を作成する。
+		Inquiry inquiry = new Inquiry();
+		inquiry.setId(4);
+		inquiry.setName("Jamie");
+		inquiry.setEmail("sample@example.com");
+		inquiry.setContents("Hello");
+
+		inquiryService.update(inquiry);
+
+		// ↓ === try-catchを使った例外の捕捉方法(捕捉範囲は、特定のメソッド内のみ) ===
+
+//		// tryブロックの中には、例外が発生する可能性のある処理を記述する。
+//		// catchブロックの中には、例外が発生した後の処理を記述する。
+//		try {
+//			inquiryService.update(inquiry);
+//			// もしupdateメソッドで独自に設定した例外が投げられた場合、catchの中の処理に移行する。
+//		} catch (InquiryNotFoundException e) {
+//			// 独自に設定した例外をここでキャッチする。値はmodelに渡すこともできる。
+//			model.addAttribute("message", e);
+//			return "error/CustomPage";
+//		}
+
 		model.addAttribute("inquiryList", list);
 		model.addAttribute("title", "Inquiry Index");
 		
@@ -123,5 +146,12 @@ public class InquiryController {
 		// 【注意】↓redirectの場合、以下の「inquiry/form」部分はviewファイルではなく、URLのパスを意味している。
 		return "redirect:/inquiry/form";
 	}
-	
+
+	// ↓ === Controller内で例外が発生した場合の捕捉方法(捕捉範囲は1つのController内) ===
+	// 「.class」を忘れずに。
+//	@ExceptionHandler(InquiryNotFoundException.class)
+//	public String handleException(InquiryNotFoundException e, Model model) {
+//		model.addAttribute("message", e);
+//		return "error/CustomPage";
+//	}
 }
